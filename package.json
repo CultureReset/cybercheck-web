@@ -1,0 +1,24 @@
+{
+  "name": "cybercheck-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "One front end for CyberCheck: public profiles and the owner dashboard, rendered from data rather than from a list of screens.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "node scripts/check-no-hardwiring.mjs",
+    "verify": "npm run check && npm test && npm run build",
+    "test": "node tests/shape.test.mjs"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.8"
+  }
+}
