@@ -57,11 +57,42 @@ export const endpoints = {
     remove: (table, id) => `${BUSINESS}/${seg(table)}/${seg(id)}`,
   },
 
-  apps: {
+  // External tools this business connects — Toast, Google and the like.
+  // Different concern from the app platform below: a connection is an account
+  // somewhere else, an app is something installed here.
+  connections: {
     list: () => '/api/connections',
     connect: (toolId) => `/api/connections/${seg(toolId)}/connect`,
     refresh: (toolId) => `/api/connections/${seg(toolId)}/refresh`,
     disconnect: (toolId) => `/api/connections/${seg(toolId)}`,
+  },
+
+  // The app platform. These paths are resolved against PLATFORM_BASE, not
+  // API_BASE — see lib/platform.js. No app id appears in any of them: an app
+  // is addressed by the installation the owner created, so this file does not
+  // grow a line when an app is published.
+  platform: {
+    health: () => '/health',
+    me: () => '/v1/auth/me',
+    signIn: () => '/v1/auth/sign-in',
+    signOut: () => '/v1/auth/sign-out',
+    catalog: (params) => `/v1/catalog/apps${qs(params)}`,
+    app: (appId, params) => `/v1/catalog/apps/${seg(appId)}${qs(params)}`,
+    permissions: () => '/v1/catalog/permissions',
+    installations: (workspaceId) => `/v1/workspaces/${seg(workspaceId)}/installations`,
+    installation: (workspaceId, installationId) =>
+      `/v1/workspaces/${seg(workspaceId)}/installations/${seg(installationId)}`,
+    enabled: (workspaceId, installationId) =>
+      `/v1/workspaces/${seg(workspaceId)}/installations/${seg(installationId)}/enabled`,
+    surface: (workspaceId, installationId, surfaceId) =>
+      `/v1/workspaces/${seg(workspaceId)}/installations/${seg(installationId)}/surfaces/${seg(surfaceId)}`,
+    handoff: (workspaceId, installationId, surfaceId) =>
+      `/v1/workspaces/${seg(workspaceId)}/installations/${seg(installationId)}/surfaces/${seg(surfaceId)}/handoff`,
+    grant: (workspaceId, installationId) =>
+      `/v1/workspaces/${seg(workspaceId)}/installations/${seg(installationId)}/permissions`,
+    revoke: (workspaceId, installationId, permissionId) =>
+      `/v1/workspaces/${seg(workspaceId)}/installations/${seg(installationId)}/permissions/${seg(permissionId)}`,
+    publicSurfaces: (slug) => `/public/${seg(slug)}/surfaces`,
   },
 
   public: {

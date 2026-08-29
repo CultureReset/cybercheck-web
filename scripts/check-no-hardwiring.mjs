@@ -67,6 +67,17 @@ const RULES = [
     test: /\b(block\.key|section|table|key)\s*[!=]==?\s*['"`][a-z_]{3,}['"`]/g,
   },
   {
+    name: 'no-app-id-branches',
+    why: 'An app is addressed by the installation the owner created. A branch on an app id means one app got special treatment in the shell, and the next one will need its own branch too.',
+    test: /\b(app_id|appId|installation\.app_id|packageKey)\s*[!=]==?\s*['"`]/g,
+  },
+  {
+    name: 'no-surface-id-branches',
+    why: 'Surfaces are rendered because an installation declares them, never because the shell recognised the name of one.',
+    allow: (rel) => rel === 'src/lib/appNav.js', // the documented kind filter
+    test: /\b(surface_id|surfaceId)\s*[!=]==?\s*['"`]/g,
+  },
+  {
     name: 'no-section-lists',
     why: 'A list of section or table names is a list of the businesses this app supports.',
     test: /\[\s*(['"][a-z][a-z0-9_]{2,}['"]\s*,\s*){4,}['"][a-z][a-z0-9_]{2,}['"]\s*,?\s*\]/g,
@@ -98,6 +109,17 @@ for (const file of files.filter((f) => f.includes('/surfaces/'))) {
   if (/from\s+['"][^'"]*blocks\/renderers/.test(raw)) {
     fail(file, lineOf(raw, raw.indexOf('blocks/renderers')), 'surfaces-use-the-registry',
          'a surface imports a renderer directly');
+  }
+}
+
+// Installed apps must reach the nav through the projection, not through a list
+// somewhere in a component. If a surface file builds its own nav entries, the
+// day an app is uninstalled one of the two lists will be wrong.
+for (const file of files.filter((f) => f.includes('/App.jsx'))) {
+  const raw = readFileSync(file, 'utf8');
+  if (!/useInstalledApps|navItems/.test(raw)) {
+    fail(file, 0, 'nav-from-installations',
+         'the shell must build its app links from the installed-apps projection');
   }
 }
 

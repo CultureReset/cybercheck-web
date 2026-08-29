@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "check": "node scripts/check-no-hardwiring.mjs",
     "verify": "npm run check && npm test && npm run build",
-    "test": "node tests/shape.test.mjs && node tests/viewlet.test.mjs"
+    "test": "node tests/shape.test.mjs && node tests/viewlet.test.mjs && node tests/appNav.test.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

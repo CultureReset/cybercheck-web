@@ -14,6 +14,18 @@ const env = import.meta.env ?? {};
 export const API_BASE = (env.VITE_API_BASE || '').replace(/\/+$/, '');
 
 /**
+ * Where the app platform is.
+ *
+ * The catalogue, what this workspace has installed, and the surfaces those
+ * apps draw all come from there. Empty means no platform is attached, and the
+ * dashboard renders without an Apps section rather than breaking — a
+ * deployment that does not sell apps should not have to stub one out.
+ */
+export const PLATFORM_BASE = (env.VITE_PLATFORM_BASE || '').replace(/\/+$/, '');
+
+export const hasPlatform = () => Boolean(PLATFORM_BASE);
+
+/**
  * Single-business mode.
  *
  * A deployment on a business's own domain sets this and the router stops

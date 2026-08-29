@@ -6,10 +6,14 @@ import api from './lib/api.js';
 import endpoints from './lib/endpoints.js';
 import { useAsync } from './lib/useAsync.js';
 
+import { InstalledAppsProvider, useInstalledApps } from './lib/useInstalledApps.jsx';
+
 import Directory from './surfaces/Directory.jsx';
 import PublicProfile from './surfaces/PublicProfile.jsx';
 import OwnerDashboard from './surfaces/OwnerDashboard.jsx';
 import AppStore from './surfaces/AppStore.jsx';
+import AppSurface from './surfaces/AppSurface.jsx';
+import Connections from './surfaces/Connections.jsx';
 import SignIn from './surfaces/SignIn.jsx';
 import SignUp from './surfaces/SignUp.jsx';
 
@@ -22,6 +26,12 @@ import SignUp from './surfaces/SignUp.jsx';
  *
  * The owner routes are identical either way: the API resolves which business
  * the session owns, so there is no slug in any of these paths.
+ *
+ * Installed apps extend both the nav and the routes. There is one app route —
+ * /a/:installationId/:surfaceId — which is every app that will ever exist,
+ * because an app is addressed by the installation the owner created rather
+ * than by its name. Installing one adds a link; removing it takes the link
+ * away; neither touches this file.
  */
 
 function RequireSession({ children }) {
@@ -49,6 +59,7 @@ function TopBar() {
         {signedIn ? (
           <>
             <NavLink className="nav-link" to="/dashboard">Dashboard</NavLink>
+            <InstalledAppLinks />
             <NavLink className="nav-link" to="/apps">Apps</NavLink>
             <button className="btn sm ghost" onClick={() => { session.clear(); window.location.assign('/'); }}>
               Sign out
@@ -65,9 +76,25 @@ function TopBar() {
   );
 }
 
+/**
+ * The nav entries the installed apps earn.
+ *
+ * A projection of what the platform reports, nothing more. No app is named
+ * here, and scripts/check-no-hardwiring.mjs fails the build if one ever is.
+ */
+function InstalledAppLinks() {
+  const { navItems } = useInstalledApps();
+  return navItems.map((item) => (
+    <NavLink className="nav-link" key={item.key} to={item.path} title={item.appName}>
+      {item.icon ? `${item.icon} ` : ''}{item.title}
+    </NavLink>
+  ));
+}
+
 export default function App() {
   return (
     <BrowserRouter>
+      <InstalledAppsProvider>
       <div className="shell">
         <TopBar />
         <main style={{ flex: 1 }}>
@@ -78,6 +105,10 @@ export default function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/dashboard" element={<RequireSession><OwnerDashboard /></RequireSession>} />
             <Route path="/apps" element={<RequireSession><AppStore /></RequireSession>} />
+            <Route path="/connections" element={<RequireSession><Connections /></RequireSession>} />
+            {/* One route, every app. */}
+            <Route path="/a/:installationId/:surfaceId"
+                   element={<RequireSession><AppSurface /></RequireSession>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
@@ -85,6 +116,7 @@ export default function App() {
           <div className="wrap">Every screen on this site is rendered from data. Nothing here is a template.</div>
         </footer>
       </div>
+      </InstalledAppsProvider>
     </BrowserRouter>
   );
 }
