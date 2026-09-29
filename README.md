@@ -30,6 +30,24 @@ layout — and none of the four is named anywhere in `src/`.
 
 ---
 
+<!-- branches:start -->
+## Branches
+
+*Read from GitHub on 2026-09-29. 4 branches.*
+
+- **Default branch on GitHub:** `claude/review-codebase-zips-hck9hd`.
+- **`claude/repo-code-analysis-y4n1k7`** is where this README and the audit fixes live. It contains every commit on `claude/review-codebase-zips-hck9hd` and more (this README, the audit fixes and the screenshots).
+- **2 other branches hold commits that `claude/repo-code-analysis-y4n1k7` does not have.** The newest is `claude/modular-web-app-store-32zh3e` (last commit 2026-08-29, 1 commit not in the work branch). Check those before assuming the work branch is the whole story.
+
+| Branch | Last commit | Not in the work branch | Last commit message |
+| --- | --- | --- | --- |
+| `claude/repo-code-analysis-y4n1k7` (work branch) | 2026-09-29 | - | this README and the audit fixes |
+| `claude/modular-web-app-store-32zh3e` | 2026-08-29 | 1 | feat(apps): Installed apps extend the dashboard's own nav |
+| `main` | 2026-08-29 | 1 | feat(apps): Installed apps extend the dashboard's own nav |
+| `claude/review-codebase-zips-hck9hd` (default) | 2026-08-28 | 0 | Views as data — ported from Huly's view plugin |
+
+<!-- branches:end -->
+
 ## How it works
 
 ```
