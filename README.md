@@ -1,3 +1,16 @@
+> **Status: an earlier front end, not deployed and not part of Ghost.** One front
+> end where every screen is drawn from data by 13 renderers, no page per business
+> type. `npm run verify` (no-hardwiring check, tests, build) passes.
+
+| Sign in | Directory |
+| --- | --- |
+| ![Sign in](docs/images/signin.png) | ![Directory with no data connected](docs/images/directory-empty.png) |
+
+*Run locally with a test backend that returns no businesses, so the directory
+shows its empty state.*
+
+---
+
 # cybercheck-web
 
 One front end. Every screen is rendered from data.
